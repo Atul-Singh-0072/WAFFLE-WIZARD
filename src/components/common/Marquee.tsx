@@ -16,7 +16,7 @@ export function Marquee({ items, tone = "gold", className }: MarqueeProps) {
       className={cn(
         "relative overflow-hidden border-y",
         tone === "gold" && "border-secondary-500/40 bg-secondary text-ink",
-        tone === "dark" && "border-white/10 bg-ink text-white",
+        tone === "dark" && "on-dark border-white/10 bg-ink text-white",
         tone === "light" && "border-border bg-surface text-text",
         className,
       )}

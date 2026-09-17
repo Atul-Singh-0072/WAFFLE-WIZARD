@@ -15,9 +15,11 @@ function stock(id: string, width = 1400): string {
 }
 
 export const media = {
-  /** From the poster: hero pizza with the "Freshly Baked Always" badge, feathered edges. */
+  /** From the poster: hero pizza with the "Freshly Baked Always" badge, backdrop cut out. */
   poster: {
-    heroPizza: "/menu/poster-hero-pizza-2.png",
+    // Rename (never re-save in place) when the artwork changes — next/image
+    // caches optimized output by URL and would keep serving the old version.
+    heroPizza: "/menu/hero-pizza-v4.webp",
     chocoPizza: "/menu/choco-pizza.jpg",
     cheeseSlice: "/menu/cheese-slice.jpg",
   },

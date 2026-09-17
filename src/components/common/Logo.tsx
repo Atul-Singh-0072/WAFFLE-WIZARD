@@ -85,7 +85,7 @@ export function Logo({
             )}
           >
             <span className="text-secondary">Waffle</span>
-            <span className="text-white">Wizard</span>
+            <span className="text-text">Wizard</span>
           </span>
         )}
       </span>

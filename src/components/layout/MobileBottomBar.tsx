@@ -50,7 +50,7 @@ export function MobileBottomBar() {
                   <span className="block font-display text-base font-bold tabular">{formatPrice(cart.subtotal)}</span>
                 </span>
               </span>
-              <span className="inline-flex items-center gap-1.5 rounded-full bg-[#1a1024] px-4 py-2 text-sm font-bold text-secondary">
+              <span className="on-dark inline-flex items-center gap-1.5 rounded-full bg-[#1a1024] px-4 py-2 text-sm font-bold text-secondary">
                 View cart <ArrowRight className="size-4" />
               </span>
             </button>

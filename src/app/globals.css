@@ -113,6 +113,117 @@
 }
 
 /* ==================================================================
+   LIGHT THEME
+   Dark is the brand default and lives in :root above, so the site is dark
+   with no attribute at all. Light re-declares only what must change.
+   Sections marked .on-dark keep the dark palette in both themes, so the
+   footer and the editorial bands stay dark on a light page.
+   ================================================================== */
+
+:root {
+  color-scheme: dark;
+  /* Gold that text can use. Bright on dark, darker amber on light surfaces. */
+  --gold-ink: var(--secondary);
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+
+  /* --- Core brand roles --- */
+  --primary: #4b1d8f;
+  --secondary: #ffcf1f;
+  --accent: #e0452c;
+  --background: #fffaf0;
+  --surface: #ffffff;
+  --text: #1a1024;
+  --muted: #6f6478;
+  --border: #ece1d3;
+  --success: #12a150;
+  --danger: #d92d20;
+
+  --gold-ink: #9a6b00;
+
+  /* --- Menu panels now sit on a light page: white with a warm edge --- */
+  --panel: #ffffff;
+  --panel-2: #fff6e2;
+  --panel-text: #1a1024;
+  --panel-muted: #6b5f4a;
+  --panel-border: rgba(120, 80, 0, 0.16);
+
+  /* --- Purple scale back to its natural order (50 lightest) --- */
+  --primary-50: #f6f1ff;
+  --primary-100: #ece0fe;
+  --primary-200: #d8c3fd;
+  --primary-300: #bd9cf7;
+  --primary-400: #9b6cee;
+  --primary-500: #7b3fe4;
+  --primary-600: #6428c9;
+  --primary-700: #4b1d8f;
+  --primary-800: #38146b;
+  --primary-900: #260e4a;
+  --primary-950: #17082f;
+
+  /* --- Ember scale likewise --- */
+  --accent-50: #fff1ed;
+  --accent-100: #ffdfd4;
+  --accent-200: #ffbfa9;
+  --accent-300: #ff9575;
+  --accent-400: #f76a45;
+  --accent-500: #e0452c;
+  --accent-600: #c1331d;
+  --accent-700: #9c2717;
+  --accent-800: #771d12;
+  --accent-900: #55150d;
+
+  /* --- Neutrals --- */
+  --surface-2: #fdf6ea;
+  --surface-3: #f5ecdc;
+  --text-soft: #4a3d57;
+
+  /* --- Purple-tinted shadows instead of black --- */
+  --shadow-xs: 0 1px 2px rgba(38, 14, 74, 0.05);
+  --shadow-sm: 0 2px 8px rgba(38, 14, 74, 0.07);
+  --shadow-md: 0 8px 24px -6px rgba(38, 14, 74, 0.12);
+  --shadow-lg: 0 20px 44px -12px rgba(38, 14, 74, 0.18);
+  --shadow-xl: 0 32px 70px -20px rgba(38, 14, 74, 0.24);
+  --shadow-gold: 0 12px 30px -10px rgba(214, 160, 0, 0.45);
+  --shadow-ember: 0 12px 30px -10px rgba(224, 69, 44, 0.4);
+}
+
+/* Dark islands: footer, editorial bands and feature cards keep the dark
+   palette even in light mode, so their contents need no per-theme classes. */
+:root[data-theme="light"] .on-dark {
+  color-scheme: dark;
+
+  --background: #0d0810;
+  --surface: #171021;
+  --surface-2: #1f1727;
+  --surface-3: #2a2033;
+  --text: #fff8ea;
+  --text-soft: #e6dccb;
+  --muted: #b9aea3;
+  --border: rgba(255, 214, 90, 0.16);
+  --gold-ink: var(--secondary);
+
+  --primary-50: #1c1130;
+  --primary-100: #2a1a47;
+  --primary-200: #3a2661;
+  --primary-300: #52368a;
+  --primary-400: #6d47b8;
+  --primary-500: #8b5cf6;
+  --primary-600: #a78bfa;
+  --primary-700: #b794f6;
+  --primary-800: #c9b3fb;
+  --primary-900: #ddd0fd;
+  --primary-950: #ede6ff;
+
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.45);
+  --shadow-md: 0 8px 24px -6px rgba(0, 0, 0, 0.55);
+  --shadow-lg: 0 20px 44px -12px rgba(0, 0, 0, 0.65);
+  --shadow-xl: 0 32px 70px -20px rgba(0, 0, 0, 0.75);
+}
+
+/* ==================================================================
    TAILWIND THEME MAPPING
    Exposes the tokens above as utilities: bg-primary, text-muted,
    border-border, rounded-lg, shadow-md, font-display …
@@ -415,12 +526,6 @@
     background-repeat: no-repeat;
   }
 
-  .bg-grid-soft {
-    background-image:
-      linear-gradient(to right, rgba(255, 207, 31, 0.06) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(255, 207, 31, 0.06) 1px, transparent 1px);
-    background-size: 56px 56px;
-  }
 
 
   /* Edge fade for horizontally scrolling rails. */
@@ -550,6 +655,143 @@
   color: #1a1024;
   padding: 0.3rem 0.8rem;
   box-shadow: 0 2px 0 rgba(120, 80, 0, 0.35);
+}
+
+/* ==================================================================
+   LIGHT-THEME ADJUSTMENTS
+   Only the pieces that were drawn for a dark page and cannot be fixed
+   by swapping a token. Everything here is scoped to [data-theme="light"],
+   so dark mode is byte-for-byte unchanged.
+   ================================================================== */
+
+/* Bright gold is unreadable as text on a light page; .on-dark restores it. */
+:root[data-theme="light"] .text-secondary {
+  color: var(--gold-ink);
+}
+
+/* Pale golds were picked to glow on black; they vanish on cream. */
+:root[data-theme="light"] .text-secondary-100,
+:root[data-theme="light"] .text-secondary-200,
+:root[data-theme="light"] .text-secondary-300 {
+  color: var(--gold-ink);
+}
+
+:root[data-theme="light"] .on-dark .text-secondary-100 {
+  color: var(--secondary-100);
+}
+
+:root[data-theme="light"] .on-dark .text-secondary-200 {
+  color: var(--secondary-200);
+}
+
+:root[data-theme="light"] .on-dark .text-secondary-300 {
+  color: var(--secondary-300);
+}
+
+/* The hero pizza's shadow was tuned against black. */
+:root[data-theme="light"] .hero-pizza {
+  filter: drop-shadow(0 26px 40px rgba(38, 14, 74, 0.28));
+}
+
+/* Foil headline: deeper stops and a warmer glint so it reads on cream. */
+:root[data-theme="light"] .text-foil {
+  background-image:
+    linear-gradient(115deg, transparent 43%, rgba(255, 244, 205, 0.9) 50%, transparent 57%),
+    linear-gradient(100deg, #6b3f04 0%, #a86f08 28%, #d99c0c 50%, #a86f08 72%, #5c3503 100%);
+  filter: drop-shadow(0 1px 0 rgba(255, 255, 255, 0.5));
+}
+
+:root[data-theme="light"] .text-foil-blue {
+  filter: drop-shadow(0 1px 0 rgba(255, 255, 255, 0.5));
+}
+
+:root[data-theme="light"] .foil-crisp {
+  -webkit-text-stroke: 0.5px rgba(70, 40, 5, 0.3);
+}
+
+:root[data-theme="light"] .foil-crisp.text-foil-blue {
+  -webkit-text-stroke: 0.5px rgba(20, 35, 90, 0.3);
+}
+
+:root[data-theme="light"] .on-dark .text-foil {
+  background-image:
+    linear-gradient(115deg, transparent 43%, rgba(255, 251, 235, 0.85) 50%, transparent 57%),
+    linear-gradient(100deg, #9a5b06 0%, #d98b0a 28%, #f5b21a 50%, #d98b0a 72%, #7c4a05 100%);
+  filter: drop-shadow(0 1px 0 rgba(120, 60, 8, 0.45)) drop-shadow(0 8px 18px rgba(245, 178, 26, 0.3));
+}
+
+/* The starfield is white specks for a dark sky — meaningless on a light page. */
+:root[data-theme="light"] .bg-starfield {
+  display: none;
+}
+
+:root[data-theme="light"] .on-dark .bg-starfield {
+  display: block;
+}
+
+/* Menu panels: drop the gold halo, which only worked against darkness. */
+:root[data-theme="light"] .panel-cream {
+  border-color: var(--panel-border);
+  box-shadow: var(--shadow-md);
+}
+
+:root[data-theme="light"] .on-dark .panel-cream {
+  box-shadow:
+    0 0 0 1px rgba(255, 207, 31, 0.35),
+    var(--shadow-lg);
+}
+
+:root[data-theme="light"] .gold-border {
+  border-color: rgba(154, 107, 0, 0.35);
+  box-shadow: var(--shadow-lg);
+}
+
+:root[data-theme="light"] .on-dark .gold-border {
+  border-color: rgba(255, 207, 31, 0.45);
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.6),
+    0 0 24px -6px rgba(255, 207, 31, 0.35);
+}
+
+:root[data-theme="light"] .founder-card {
+  box-shadow: var(--shadow-lg);
+}
+
+:root[data-theme="light"] ::selection {
+  background: var(--primary-200);
+  color: var(--primary-900);
+}
+
+/* ==================================================================
+   THEME TOGGLE
+   Both icons share the same cell; the one for the *other* theme shows.
+   ================================================================== */
+
+.theme-toggle__icon {
+  position: absolute;
+  transition:
+    opacity 0.28s ease,
+    transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.theme-toggle__moon {
+  opacity: 0;
+  transform: rotate(-90deg) scale(0.4);
+}
+
+.theme-toggle__sun {
+  opacity: 1;
+  transform: none;
+}
+
+:root[data-theme="light"] .theme-toggle__sun {
+  opacity: 0;
+  transform: rotate(90deg) scale(0.4);
+}
+
+:root[data-theme="light"] .theme-toggle__moon {
+  opacity: 1;
+  transform: none;
 }
 
 /* ================================================================== */

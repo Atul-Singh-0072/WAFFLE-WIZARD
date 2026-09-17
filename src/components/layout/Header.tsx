@@ -7,6 +7,7 @@ import { useState } from "react";
 import { Logo } from "@/components/common/Logo";
 import { LocationPill } from "@/components/layout/LocationPill";
 import { MobileNav } from "@/components/layout/MobileNav";
+import { ThemeToggle } from "@/components/layout/ThemeToggle";
 import { Button } from "@/components/ui/Button";
 import { useMounted } from "@/hooks/use-mounted";
 import { useScrolled } from "@/hooks/use-scrolled";
@@ -86,6 +87,8 @@ export function Header() {
 
           <div className="ml-auto flex items-center gap-2">
             <LocationPill />
+
+            <ThemeToggle />
 
             <button
               type="button"

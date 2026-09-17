@@ -21,15 +21,11 @@ export function PageHeader({ eyebrow, title, description, crumbs, aside, tone = 
     <header
       className={cn(
         "relative overflow-hidden",
-        dark ? "bg-ink text-white" : "bg-surface",
+        dark ? "on-dark bg-ink text-white" : "bg-surface",
         className,
       )}
     >
-      {dark ? (
-        <div className="bg-starfield pointer-events-none absolute inset-0" aria-hidden />
-      ) : (
-        <div className="bg-grid-soft pointer-events-none absolute inset-0 [mask-image:radial-gradient(60%_80%_at_20%_50%,#000,transparent)]" aria-hidden />
-      )}
+      {dark && <div className="bg-starfield pointer-events-none absolute inset-0" aria-hidden />}
       <div className="container-page relative flex flex-col gap-6 pb-10 pt-6 md:pb-14 md:pt-8 lg:flex-row lg:items-end lg:justify-between">
         <div className="max-w-2xl">
           {crumbs && <Breadcrumbs items={crumbs} tone={tone} className="mb-5" />}

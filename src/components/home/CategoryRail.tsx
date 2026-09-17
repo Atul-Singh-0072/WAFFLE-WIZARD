@@ -34,7 +34,7 @@ export function CategoryRail({ live, upcoming }: CategoryRailProps) {
                 <li className="list-none">
                   <Link
                     href={`/menu?category=${category.slug}`}
-                    className="group relative block aspect-[4/5] overflow-hidden rounded-xl bg-ink shadow-sm transition-[transform,box-shadow] duration-300 hover:shadow-lg motion-safe:hover:-translate-y-1 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-secondary-300/70"
+                    className="on-dark group relative block aspect-[4/5] overflow-hidden rounded-xl bg-ink shadow-sm transition-[transform,box-shadow] duration-300 hover:shadow-lg motion-safe:hover:-translate-y-1 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-secondary-300/70"
                   >
                     <Image
                       src={category.image}

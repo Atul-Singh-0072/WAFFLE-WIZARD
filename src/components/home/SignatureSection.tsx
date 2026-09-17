@@ -13,7 +13,7 @@ export function SignatureSection({ product }: { product?: Product }) {
   if (!product) return null;
 
   return (
-    <section className="relative overflow-hidden bg-ink text-white" aria-labelledby="signature-heading">
+    <section className="on-dark relative overflow-hidden bg-ink text-white" aria-labelledby="signature-heading">
       <div className="bg-starfield pointer-events-none absolute inset-0" aria-hidden />
       <div className="pointer-events-none absolute -left-40 top-1/2 h-[36rem] w-[36rem] -translate-y-1/2 rounded-full bg-primary-700/35 blur-3xl" aria-hidden />
 

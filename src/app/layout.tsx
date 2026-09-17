@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Bricolage_Grotesque, Plus_Jakarta_Sans } from "next/font/google";
 import { BrandIntro } from "@/components/common/BrandIntro";
 import { BRAND_INTRO_BOOT } from "@/components/common/brand-intro-boot";
+import { THEME_BOOT } from "@/lib/theme";
 import { JsonLd } from "@/components/common/JsonLd";
 import { Providers } from "@/components/common/Providers";
 import { WaffleZonePopup } from "@/components/common/WaffleZonePopup";
@@ -72,7 +73,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           "script tag while rendering" warning during HMR. next/script's beforeInteractive
           is deferred ~1.5s in Turbopack dev, which would flash the page before the splash.
         */}
-        <div hidden aria-hidden dangerouslySetInnerHTML={{ __html: `<script>${BRAND_INTRO_BOOT}</script>` }} />
+        <div hidden aria-hidden dangerouslySetInnerHTML={{ __html: `<script>${THEME_BOOT}${BRAND_INTRO_BOOT}</script>` }} />
         <BrandIntro />
         <JsonLd data={[organizationSchema(), websiteSchema()]} />
         <Providers>

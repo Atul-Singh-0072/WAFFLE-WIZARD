@@ -6,7 +6,7 @@ export function FinalCTA() {
   return (
     <section className="container-page pb-16 md:pb-24" aria-labelledby="cta-heading">
       <Reveal>
-        <div className="gold-border relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#3a2661] via-[#1c1130] to-ink px-6 py-14 text-center text-white shadow-xl md:px-12 md:py-20">
+        <div className="on-dark gold-border relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#3a2661] via-[#1c1130] to-ink px-6 py-14 text-center text-white shadow-xl md:px-12 md:py-20">
           <div className="bg-starfield pointer-events-none absolute inset-0" aria-hidden />
           <div className="pointer-events-none absolute -right-20 -top-20 size-72 rounded-full bg-secondary/25 blur-3xl" aria-hidden />
           <div className="pointer-events-none absolute -bottom-24 -left-16 size-72 rounded-full bg-accent/25 blur-3xl" aria-hidden />

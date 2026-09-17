@@ -32,7 +32,7 @@ export function OfferCard({ offer, layout = "grid", className }: OfferCardProps)
   return (
     <article
       className={cn(
-        "group relative flex flex-col overflow-hidden rounded-xl bg-ink text-white shadow-md transition-[transform,box-shadow] duration-300 hover:shadow-xl motion-safe:hover:-translate-y-1",
+        "on-dark group relative flex flex-col overflow-hidden rounded-xl bg-ink text-white shadow-md transition-[transform,box-shadow] duration-300 hover:shadow-xl motion-safe:hover:-translate-y-1",
         layout === "rail" && "w-[300px] shrink-0 snap-start sm:w-[340px]",
         className,
       )}

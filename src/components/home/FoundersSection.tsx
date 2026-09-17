@@ -56,7 +56,7 @@ export function FoundersSection() {
         </Reveal>
 
         <Reveal>
-          <article className="founder-card mx-auto grid max-w-5xl overflow-hidden rounded-3xl bg-ink md:grid-cols-12">
+          <article className="on-dark founder-card mx-auto grid max-w-5xl overflow-hidden rounded-3xl bg-ink md:grid-cols-12">
             {/* Photo — click to enlarge */}
             <button
               type="button"

@@ -130,7 +130,7 @@ export function ProductCard({ product, layout = "grid", priority = false, classN
                   className={cn(
                     "flex flex-col items-center rounded-lg border px-1 py-1.5 text-[11px] font-bold leading-tight transition-colors",
                     selected
-                      ? "border-[#1a1024] bg-[#1a1024] text-secondary"
+                      ? "on-dark border-[#1a1024] bg-[#1a1024] text-secondary"
                       : "border-[#1a1024]/15 bg-white/60 text-[#1a1024] hover:border-[#1a1024]/40",
                   )}
                 >
@@ -159,7 +159,7 @@ export function ProductCard({ product, layout = "grid", priority = false, classN
             aria-label={`Add ${product.name} to cart`}
             className={cn(
               "flex h-11 flex-1 items-center justify-center gap-1.5 rounded-full text-sm font-extrabold transition-all duration-200 active:scale-[0.97] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-secondary-300/70",
-              justAdded ? "bg-success text-white" : "bg-[#1a1024] text-secondary hover:bg-[#2a1a47]",
+              justAdded ? "bg-success text-white" : "on-dark bg-[#1a1024] text-secondary hover:bg-[#2a1a47]",
             )}
           >
             {justAdded ? (

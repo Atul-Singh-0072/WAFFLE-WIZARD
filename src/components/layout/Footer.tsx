@@ -12,7 +12,7 @@ export function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="relative mt-auto overflow-hidden bg-ink text-white">
+    <footer className="on-dark relative mt-auto overflow-hidden bg-ink text-white">
       <div className="bg-starfield pointer-events-none absolute inset-0 opacity-80" aria-hidden />
       <div
         className="pointer-events-none absolute -top-40 left-1/2 h-80 w-[60rem] -translate-x-1/2 rounded-full bg-primary-700/30 blur-3xl"

@@ -18,9 +18,8 @@ const proofPoints = [
 export function Hero({ signature }: { signature?: Product }) {
   return (
     <section className="relative overflow-hidden" aria-labelledby="hero-heading">
-      {/* Poster atmosphere: starfield, faint grid, purple smoke and a gold glow. */}
+      {/* Poster atmosphere: starfield, purple smoke and a gold glow. */}
       <div className="bg-starfield pointer-events-none absolute inset-0" aria-hidden />
-      <div className="bg-grid-soft pointer-events-none absolute inset-0 [mask-image:radial-gradient(70%_60%_at_50%_30%,#000,transparent)]" aria-hidden />
       <div className="pointer-events-none absolute -left-32 top-10 h-[30rem] w-[30rem] rounded-full bg-primary-400/25 blur-3xl" aria-hidden />
       <div className="pointer-events-none absolute -right-24 bottom-0 h-[28rem] w-[28rem] rounded-full bg-secondary/15 blur-3xl" aria-hidden />
 
@@ -91,7 +90,7 @@ export function Hero({ signature }: { signature?: Product }) {
 
         {/* Visual: the poster's own pizza, edges feathered into the dark page. */}
         <div className="relative lg:col-span-6">
-          <div className="relative mx-auto aspect-[1000/648] w-full max-w-2xl [animation-delay:120ms] animate-fade-up">
+          <div className="relative mx-auto aspect-[1000/620] w-full max-w-2xl [animation-delay:120ms] animate-fade-up">
             <div className="pointer-events-none absolute inset-[12%] rounded-full bg-secondary/25 blur-3xl" aria-hidden />
             <div className="motion-safe:animate-float relative h-full">
               <Image
@@ -101,7 +100,7 @@ export function Hero({ signature }: { signature?: Product }) {
                 priority
                 fetchPriority="high"
                 sizes="(min-width: 1024px) 640px, 92vw"
-                className="object-contain drop-shadow-[0_30px_50px_rgba(0,0,0,0.7)] [mask-image:radial-gradient(72%_62%_at_50%_52%,#000_58%,transparent_100%)]"
+                className="hero-pizza object-contain drop-shadow-[0_26px_40px_rgba(0,0,0,0.55)]"
                 placeholder="blur"
                 blurDataURL={BLUR_DATA_URL}
               />
@@ -130,7 +129,7 @@ export function Hero({ signature }: { signature?: Product }) {
             )}
 
             {/* Service chip */}
-            <div className="absolute -top-2 right-2 rounded-full border border-secondary/50 bg-ink px-4 py-2 text-xs font-bold text-secondary shadow-lg sm:-right-2 sm:top-4">
+            <div className="on-dark absolute -top-2 right-2 rounded-full border border-secondary/50 bg-ink px-4 py-2 text-xs font-bold text-secondary shadow-lg sm:-right-2 sm:top-4">
               Delivery · Pickup · Dine-in
             </div>
           </div>

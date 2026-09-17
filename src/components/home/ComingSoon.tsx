@@ -15,7 +15,7 @@ export function ComingSoon({ categories }: { categories: Category[] }) {
   const feature = categories.length === 1;
 
   return (
-    <section className="relative overflow-hidden bg-gradient-to-b from-[#1c1130] via-[#150b24] to-ink text-white" aria-labelledby="coming-heading">
+    <section className="on-dark relative overflow-hidden bg-gradient-to-b from-[#1c1130] via-[#150b24] to-ink text-white" aria-labelledby="coming-heading">
       <div className="bg-starfield pointer-events-none absolute inset-0" aria-hidden />
 
       <div className="container-page section-y relative">
