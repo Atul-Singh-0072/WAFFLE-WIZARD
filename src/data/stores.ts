@@ -17,12 +17,16 @@ export const stores: Store[] = [
     slug: "lucknow-aliganj",
     name: "Waffle Wizard Aliganj",
     locality: "Aliganj",
-    addressLine1: "Aliganj",
+    addressLine1: "Jio Park, Sector C",
     city: "Lucknow",
     state: "Uttar Pradesh",
     pincode: "226021",
-    latitude: 26.8894,
-    longitude: 80.9394,
+    // Jio Park, Sector C. Not in OpenStreetMap, so this was located by matching
+    // the surrounding satellite imagery (the park's circular ground, Jankipuram
+    // Colony Road to the north, Kursi Road to the east) against the business's
+    // own map screenshot. Confirm against a pin dropped at the shop door.
+    latitude: 26.905,
+    longitude: 80.9549,
     phone: "7985795093",
     email: "mr.pizzawizard@gmail.com",
     openingHours: STANDARD,

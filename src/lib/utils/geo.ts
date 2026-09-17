@@ -62,8 +62,10 @@ export function boundsFor(stores: Store[]): { center: Coordinates; zoom: number 
     longitude: (Math.min(...lons) + Math.max(...lons)) / 2,
   };
 
+  // A single outlet opens at street level; wider spreads zoom out to fit.
   const spread = Math.max(Math.max(...lats) - Math.min(...lats), Math.max(...lons) - Math.min(...lons));
-  const zoom = spread > 0.6 ? 9 : spread > 0.25 ? 10 : spread > 0.12 ? 11 : spread > 0.05 ? 12 : 13;
+  const zoom =
+    stores.length === 1 ? 17 : spread > 0.6 ? 9 : spread > 0.25 ? 10 : spread > 0.12 ? 11 : spread > 0.05 ? 12 : 14;
 
   return { center, zoom };
 }

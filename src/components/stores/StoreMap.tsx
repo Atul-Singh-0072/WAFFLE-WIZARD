@@ -41,12 +41,15 @@ const userIcon = L.divIcon({
   html: `<span style="display:block;width:18px;height:18px;border-radius:50%;background:#e0452c;border:3px solid #fff;box-shadow:0 0 0 6px rgba(224,69,44,.22)"></span>`,
 });
 
+/** Close enough to read the streets around a single outlet. */
+const STREET_ZOOM = 17;
+
 /** Pans to the active store whenever it changes. */
 function FlyTo({ store }: { store?: Store }) {
   const map = useMap();
   useEffect(() => {
     if (!store) return;
-    map.flyTo([store.latitude, store.longitude], Math.max(map.getZoom(), 13), { duration: 0.6 });
+    map.flyTo([store.latitude, store.longitude], Math.max(map.getZoom(), STREET_ZOOM), { duration: 0.6 });
   }, [store, map]);
   return null;
 }
@@ -57,12 +60,12 @@ function FitBounds({ stores }: { stores: Store[] }) {
   useEffect(() => {
     if (stores.length === 0) return;
     if (stores.length === 1) {
-      map.setView([stores[0].latitude, stores[0].longitude], 13);
+      map.setView([stores[0].latitude, stores[0].longitude], STREET_ZOOM);
       return;
     }
     map.fitBounds(
       stores.map((s) => [s.latitude, s.longitude] as [number, number]),
-      { padding: [40, 40], maxZoom: 13 },
+      { padding: [40, 40], maxZoom: 15 },
     );
   }, [stores, map]);
   return null;
@@ -83,10 +86,18 @@ export default function StoreMap({ stores, activeId, onSelect, userPosition, cla
       style={{ height: "100%", width: "100%" }}
       attributionControl
     >
-      {/* Standard OSM tiles need no API key. Swap the URL for a styled provider once keys exist. */}
+      {/*
+        Hybrid satellite view: aerial imagery underneath, a transparent
+        roads-and-labels layer on top. Esri's public tiles need no API key,
+        so this works on any host without billing set up.
+      */}
       <TileLayer
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
+        attribution='Imagery &copy; <a href="https://www.esri.com/">Esri</a>, Maxar, Earthstar Geographics'
+        url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
+        maxZoom={19}
+      />
+      <TileLayer
+        url="https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Transportation/MapServer/tile/{z}/{y}/{x}"
         maxZoom={19}
       />
       <FitBounds stores={stores} />

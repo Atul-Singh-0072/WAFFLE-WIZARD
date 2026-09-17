@@ -23,8 +23,17 @@ export const siteConfig = {
   description:
     "Waffle Wizard — freshly baked, 100% vegetarian pizzas in Lucknow. Classic, premium and signature pizzas, magical combos and a choco pizza to finish. Order for delivery, pickup or dine-in.",
 
-  /** Update before deploy — drives canonical URLs, sitemap and OG tags. */
-  url: "https://wafflewizard.example",
+  /**
+   * Canonical origin, used for canonical links, sitemap, robots and OG tags.
+   * Set NEXT_PUBLIC_SITE_URL in the host's environment (Vercel: Settings →
+   * Environment Variables) once the real domain is live; on Vercel the
+   * deployment URL is picked up automatically in the meantime.
+   */
+  url:
+    process.env.NEXT_PUBLIC_SITE_URL ??
+    (process.env.VERCEL_PROJECT_PRODUCTION_URL
+      ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+      : "https://wafflewizard.example"),
   locale: "en_IN",
   currency: "INR",
   currencySymbol: "₹",
@@ -51,7 +60,7 @@ export const siteConfig = {
   },
 
   headOffice: {
-    line1: "Aliganj",
+    line1: "Jio Park, Sector C, Aliganj",
     line2: "",
     city: "Lucknow",
     state: "Uttar Pradesh",
