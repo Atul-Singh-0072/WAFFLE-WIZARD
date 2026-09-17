@@ -1,0 +1,72 @@
+import {
+  Banknote,
+  Bike,
+  CalendarHeart,
+  ChefHat,
+  ClipboardCheck,
+  CreditCard,
+  Crown,
+  CupSoda,
+  Drumstick,
+  Flame,
+  Globe,
+  Grid2x2,
+  Home,
+  IceCreamCone,
+  Leaf,
+  MapPin,
+  MessageCircle,
+  Package,
+  Pizza,
+  Salad,
+  ShieldCheck,
+  ShoppingBag,
+  Smartphone,
+  Sparkles,
+  Star,
+  Tag,
+  Timer,
+  UtensilsCrossed,
+  Wheat,
+  type LucideIcon,
+} from "lucide-react";
+
+/**
+ * Explicit registry of icons referenced by name from data files. Keeping this
+ * a static map (rather than `import * as icons`) preserves tree-shaking.
+ */
+const registry: Record<string, LucideIcon> = {
+  Banknote,
+  Bike,
+  CalendarHeart,
+  ChefHat,
+  ClipboardCheck,
+  CreditCard,
+  Crown,
+  CupSoda,
+  Drumstick,
+  Flame,
+  Globe,
+  Grid2x2,
+  Home,
+  IceCreamCone,
+  Leaf,
+  MapPin,
+  MessageCircle,
+  Package,
+  Pizza,
+  Salad,
+  ShieldCheck,
+  ShoppingBag,
+  Smartphone,
+  Sparkles,
+  Star,
+  Tag,
+  Timer,
+  UtensilsCrossed,
+  Wheat,
+};
+
+export function getIcon(name: string | undefined): LucideIcon {
+  return (name && registry[name]) || Sparkles;
+}

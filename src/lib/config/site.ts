@@ -1,0 +1,113 @@
+/**
+ * Single source of truth for business information.
+ *
+ * Values wrapped in [SQUARE BRACKETS] are deliberate placeholders — no real
+ * business data has been invented. Replace them here and every page, footer,
+ * schema.org block and tel: link updates at once.
+ */
+
+export const PLACEHOLDER_PREFIX = "[";
+
+/** True for any string still holding an unreplaced placeholder. */
+export function isPlaceholder(value: string | undefined): boolean {
+  return !!value && value.trim().startsWith(PLACEHOLDER_PREFIX);
+}
+
+export const siteConfig = {
+  name: "Waffle Wizard",
+  shortName: "Waffle Wizard",
+  legalName: "[REGISTERED COMPANY NAME]",
+  founders: ["Shivam Srivastava", "Ram Lakhan Verma"],
+  foundedYear: "2026",
+  tagline: "Magic in Every Bite!",
+  description:
+    "Waffle Wizard — freshly baked, 100% vegetarian pizzas in Lucknow. Classic, premium and signature pizzas, magical combos and a choco pizza to finish. Order for delivery, pickup or dine-in.",
+
+  /** Update before deploy — drives canonical URLs, sitemap and OG tags. */
+  url: "https://wafflewizard.example",
+  locale: "en_IN",
+  currency: "INR",
+  currencySymbol: "₹",
+
+  contact: {
+    /** Primary line, shown first everywhere. */
+    phone: "7985795093",
+    /** E.164 for tel: links. */
+    phoneRaw: "+917985795093",
+    /** Second line, shown beside the first. */
+    phone2: "9473677414",
+    phone2Raw: "+919473677414",
+    /** Both lines are on WhatsApp; `raw` is country code + number for wa.me links. */
+    whatsapp: [
+      { display: "7985795093", raw: "917985795093" },
+      { display: "9473677414", raw: "919473677414" },
+    ],
+    whatsappMessage: "Hi Waffle Wizard! I'd like to place an order.",
+    email: "mr.pizzawizard@gmail.com",
+    support: "mr.pizzawizard@gmail.com",
+    franchise: "mr.pizzawizard@gmail.com",
+    careers: "mr.pizzawizard@gmail.com",
+    hours: "10:00 AM - 11:00 PM, all days",
+  },
+
+  headOffice: {
+    line1: "Aliganj",
+    line2: "",
+    city: "Lucknow",
+    state: "Uttar Pradesh",
+    pincode: "226021",
+    country: "IN",
+  },
+
+  social: {
+    instagram: "[INSTAGRAM URL]",
+    facebook: "[FACEBOOK URL]",
+    youtube: "[YOUTUBE URL]",
+    x: "[X / TWITTER URL]",
+  },
+
+  /**
+   * Phase 1 is pizza-only. Raising this unlocks categories tagged with a
+   * matching `launchPhase` in src/data/categories.ts — no code changes.
+   */
+  launchPhase: 1 as const,
+
+  /** Order economics. Move to the pricing service when a backend exists. */
+  pricing: {
+    packagingFee: 20,
+    deliveryFee: 39,
+    freeDeliveryAbove: 499,
+    /** GST on food service, as a fraction. */
+    taxRate: 0.05,
+  },
+
+  /** Cities with at least one live or announced outlet. */
+  serviceCities: ["Lucknow"],
+
+  defaultCity: "Lucknow",
+
+  /**
+   * Social proof shown in the footer. Placeholders until the business shares
+   * real figures — the UI deliberately renders no filled stars and no number
+   * until then, so nothing fabricated ever appears.
+   */
+  socialProof: {
+    customerCount: "[CUSTOMER COUNT]",
+    rating: "[RATING]",
+  },
+
+  seo: {
+    keywords: [
+      "Waffle Wizard",
+      "veg pizza Lucknow",
+      "pizza delivery Lucknow",
+      "pizza near me",
+      "pizza in Lucknow",
+      "pizza takeaway",
+      "order pizza online",
+    ],
+    twitterHandle: "[@HANDLE]",
+  },
+} as const;
+
+export type SiteConfig = typeof siteConfig;
