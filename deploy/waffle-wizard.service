@@ -1,4 +1,8 @@
-# systemd unit — keeps the site running and restarts it on crash or reboot.
+# systemd unit — keeps Waffle Wizard running and restarts it on crash or reboot.
+#
+# This server also hosts HM Agri One. Port 3001 is used so the two apps can
+# never collide; change it only after checking what is already listening.
+#
 # Install:  sudo cp deploy/waffle-wizard.service /etc/systemd/system/
 #           sudo systemctl daemon-reload && sudo systemctl enable --now waffle-wizard
 
@@ -11,7 +15,9 @@ Type=simple
 User=deploy
 WorkingDirectory=/var/www/waffle-wizard
 Environment=NODE_ENV=production
-Environment=PORT=3000
+Environment=PORT=3001
+# Bind to loopback only; nginx is the sole public entry point.
+Environment=HOSTNAME=127.0.0.1
 # Set this to the real site origin so sitemap and share links are correct.
 Environment=NEXT_PUBLIC_SITE_URL=https://REPLACE-WITH-YOUR-DOMAIN
 ExecStart=/usr/bin/npm start

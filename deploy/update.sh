@@ -13,7 +13,7 @@ echo "==> Building"
 npm run build
 
 echo "==> Restarting service"
-sudo systemctl restart waffle-wizard
+sudo systemctl restart waffle-wizard   # only this app; HM Agri One is untouched
 sleep 3
 sudo systemctl status waffle-wizard --no-pager | head -12
 echo "==> Done"
