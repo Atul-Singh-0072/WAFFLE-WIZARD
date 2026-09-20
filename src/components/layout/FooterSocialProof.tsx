@@ -1,89 +1,98 @@
-"use client";
-
-import { Heart, Quote, Star } from "lucide-react";
-import { useEffect, useState } from "react";
+import { Heart } from "lucide-react";
+import { GoogleRating } from "@/components/common/GoogleRating";
+import { RateUs } from "@/components/layout/RateUs";
 import { customerQuotes } from "@/data/content";
 import { isPlaceholder, siteConfig } from "@/lib/config/site";
-import { cn } from "@/lib/utils/cn";
-
-const HOLD_MS = 3200;
-const SWAP_MS = 420;
 
 /**
- * Footer social proof: count + rating rows, then a ticker that shows one short
- * review phrase at a time. Rotation pauses for reduced-motion users (they see
- * the first phrase only); the full list is also available to screen readers.
+ * Footer social proof: an optional customer count, a rating control, and a
+ * live-stream style flow of short comments rising from the bottom.
+ *
+ * The flow is pure CSS on a staggered loop — each comment carries its own
+ * delay, so six items on one 13s cycle read as a continuous stream with no
+ * JavaScript timer and nothing to hydrate.
  */
+
+const FLOW_DURATION = 13;
+
+/** Hearts drifting up the right edge, like a live stream. */
+const HEARTS = [
+  { x: "0.6rem", size: "0.95rem", dur: "6.5s", delay: "0s", drift: "-0.9rem" },
+  { x: "1.6rem", size: "0.75rem", dur: "7.5s", delay: "-1.6s", drift: "0.5rem" },
+  { x: "0.9rem", size: "1.1rem", dur: "8s", delay: "-3.2s", drift: "-0.4rem" },
+  { x: "2.1rem", size: "0.8rem", dur: "6.8s", delay: "-4.6s", drift: "0.8rem" },
+  { x: "1.2rem", size: "0.9rem", dur: "7.2s", delay: "-5.9s", drift: "-1.1rem" },
+];
+
 export function FooterSocialProof() {
-  const { customerCount, rating } = siteConfig.socialProof;
-  const countReady = !isPlaceholder(customerCount);
-  const ratingReady = !isPlaceholder(rating);
-  const filledStars = ratingReady ? Math.round(Number(rating)) : 0;
-
-  const [index, setIndex] = useState(0);
-  const [leaving, setLeaving] = useState(false);
-
-  useEffect(() => {
-    if (customerQuotes.length < 2 || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    let leaveTimer: number | undefined;
-    const cycle = window.setInterval(() => {
-      setLeaving(true);
-      leaveTimer = window.setTimeout(() => {
-        setIndex((i) => (i + 1) % customerQuotes.length);
-        setLeaving(false);
-      }, SWAP_MS);
-    }, HOLD_MS + SWAP_MS);
-    return () => {
-      window.clearInterval(cycle);
-      if (leaveTimer) window.clearTimeout(leaveTimer);
-    };
-  }, []);
+  const { customerCount } = siteConfig.socialProof;
+  const showCount = !isPlaceholder(customerCount);
+  const step = FLOW_DURATION / customerQuotes.length;
 
   return (
-    <div className="social-proof">
+    <div>
       <p className="font-sans text-xs font-bold uppercase tracking-[0.16em] text-secondary">Customers say</p>
 
-      <ul className="mt-4 space-y-3">
-        <li className="flex items-center gap-3">
-          <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-secondary/15 text-secondary">
-            <Heart className="size-4" fill="currentColor" />
-          </span>
-          <span className="text-sm text-white/75">
-            Loved by{" "}
-            <strong className={cn("font-display text-base font-extrabold text-white", !countReady && "text-white/45")}>
-              {customerCount}+
-            </strong>{" "}
-            customers
-          </span>
-        </li>
-        <li className="flex items-center gap-3">
-          <span className="flex shrink-0 items-center gap-0.5" aria-hidden>
-            {Array.from({ length: 5 }, (_, i) => (
-              <Star
-                key={i}
-                className={cn("size-[15px]", i < filledStars ? "fill-secondary text-secondary" : "fill-transparent text-secondary/45")}
-                strokeWidth={1.8}
-              />
-            ))}
-          </span>
-          <span className="text-sm text-white/75">
-            <strong className={cn("font-display text-base font-extrabold text-white", !ratingReady && "text-white/45")}>{rating}/5</strong>{" "}
-            customer rating
-          </span>
-        </li>
-      </ul>
+      <div className="mt-4 space-y-4">
+        <GoogleRating />
 
-      <div className="review-ticker mt-5" aria-hidden>
-        <Quote className="review-ticker__quote" strokeWidth={2.2} />
-        <p key={index} className={cn("review-ticker__msg", leaving && "is-leaving")}>
-          {customerQuotes[index]}
-        </p>
-        <ul className="review-ticker__dots">
-          {customerQuotes.map((quote, i) => (
-            <li key={quote} className={cn(i === index && "is-active")} />
+        {showCount && (
+          <p className="flex items-center gap-3">
+            <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-secondary/15 text-secondary">
+              <Heart className="size-4" fill="currentColor" />
+            </span>
+            <span className="text-sm text-white/75">
+              Loved by <strong className="font-display text-base font-extrabold text-white">{customerCount}+</strong>{" "}
+              customers
+            </span>
+          </p>
+        )}
+
+        <RateUs />
+      </div>
+
+      <div className="comment-flow mt-5">
+        <ul className="comment-flow__list" aria-hidden>
+          {customerQuotes.map((quote, index) => (
+            <li
+              key={quote}
+              className="comment-flow__item"
+              style={
+                {
+                  "--flow-duration": `${FLOW_DURATION}s`,
+                  // Negative, so the stream is already full at t=0 instead of
+                  // taking one 13s cycle to fill from the bottom.
+                  "--flow-delay": `${-index * step}s`,
+                } as React.CSSProperties
+              }
+            >
+              <span className="comment-flow__avatar">WW</span>
+              <span className="comment-flow__text">{quote}</span>
+            </li>
           ))}
         </ul>
+
+        <span className="comment-flow__hearts" aria-hidden>
+          {HEARTS.map((heart, index) => (
+            <i
+              key={index}
+              style={
+                {
+                  "--x": heart.x,
+                  "--size": heart.size,
+                  "--dur": heart.dur,
+                  "--delay": heart.delay,
+                  "--drift": heart.drift,
+                } as React.CSSProperties
+              }
+            >
+              ❤️
+            </i>
+          ))}
+        </span>
       </div>
+
+      {/* The flow is decorative; screen readers get the list in one place. */}
       <p className="sr-only">Customers say: {customerQuotes.join(" ")}</p>
     </div>
   );

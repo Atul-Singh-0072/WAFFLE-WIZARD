@@ -21,18 +21,17 @@ export const stores: Store[] = [
     city: "Lucknow",
     state: "Uttar Pradesh",
     pincode: "226021",
-    // Jio Park, Sector C. Not in OpenStreetMap, so this was located by matching
-    // the surrounding satellite imagery (the park's circular ground, Jankipuram
-    // Colony Road to the north, Kursi Road to the east) against the business's
-    // own map screenshot. Confirm against a pin dropped at the shop door.
-    latitude: 26.905,
-    longitude: 80.9549,
+    // Exact pin from the outlet's own Google Business listing
+    // (plus code WX33+XR2, Sector C, Aliganj), which superseded the earlier
+    // estimate matched off satellite imagery.
+    latitude: 26.9048754,
+    longitude: 80.9545106,
     phone: "7985795093",
-    email: "mr.pizzawizard@gmail.com",
+    email: "wafflewizard.live@gmail.com",
     openingHours: STANDARD,
     services: ["delivery", "pickup", "dine-in"],
     status: "live",
     deliveryRadiusKm: 6,
-    image: media.pizza.cheesyBlast,
+    image: media.pizza.cheesePull,
   },
 ];

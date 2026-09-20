@@ -58,7 +58,7 @@ export function Rail({ children, className, trackClassName, label }: RailProps) 
         aria-label={label}
         tabIndex={0}
         className={cn(
-          "no-scrollbar -mx-5 flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-px-5 px-5 pb-2 pt-1 md:-mx-8 md:scroll-px-8 md:px-8 xl:-mx-10 xl:scroll-px-10 xl:px-10",
+          "no-scrollbar bleed-rail flex snap-x snap-mandatory gap-4 overflow-x-auto pb-2 pt-1",
           trackClassName,
         )}
       >

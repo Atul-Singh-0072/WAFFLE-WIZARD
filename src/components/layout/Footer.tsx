@@ -129,8 +129,9 @@ export function Footer() {
           </div>
         </div>
 
-        {/* Legal strip */}
-        <div className="flex flex-col gap-4 border-t border-white/10 py-6 text-xs text-white/50 md:flex-row md:items-center md:justify-between">
+        {/* Legal strip. The bottom padding clears two fixed overlays that sit
+            in this corner: the mobile tab bar and the WhatsApp FAB above it. */}
+        <div className="flex flex-col gap-4 border-t border-white/10 pt-6 pb-[calc(var(--mobilebar-h)+5.5rem)] text-xs text-white/50 md:flex-row md:items-center md:justify-between lg:pb-24">
           <p>
             © {year} {siteConfig.legalName}. All rights reserved.
           </p>

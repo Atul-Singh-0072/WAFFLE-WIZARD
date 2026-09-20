@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Logo } from "@/components/common/Logo";
 import { SocialIcon } from "@/components/common/SocialIcon";
+import { ThemeToggle } from "@/components/layout/ThemeToggle";
 import { Button } from "@/components/ui/Button";
 import { Drawer } from "@/components/ui/Drawer";
 import { primaryNav, socialLinks } from "@/lib/config/nav";
@@ -68,6 +69,12 @@ export function MobileNav({ open, onClose }: MobileNavProps) {
           })}
         </ul>
       </nav>
+
+      {/* The header drops the toggle below sm to stay inside a 360px viewport. */}
+      <div className="mt-4 flex items-center justify-between rounded-xl border border-border bg-surface-2/60 py-2 pl-4 pr-2 sm:hidden">
+        <span className="text-sm font-semibold text-text">Appearance</span>
+        <ThemeToggle />
+      </div>
 
       <div className="mt-6 rounded-xl border border-border bg-surface-2/60 p-4">
         <p className="text-xs font-bold uppercase tracking-[0.14em] text-muted">Need help?</p>

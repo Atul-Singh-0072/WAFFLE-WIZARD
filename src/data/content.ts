@@ -68,8 +68,8 @@ export const brandStory = {
   heading: "Good food. Good mood. Magic in every bite.",
   /** Positioning only — no invented history, founders or milestones. */
   paragraphs: [
-    "Waffle Wizard is a vegetarian pizza brand built around one idea: real ingredients, real taste, always. Every pizza on the card — classic, premium or signature — is baked fresh after you order it.",
-    "The menu is short on purpose. Fourteen pizzas, four combos and a choco pizza, each priced exactly as printed on our card, so what you see online is what you pay at the counter.",
+    "Waffle Wizard is a vegetarian pizza brand built around one idea: real ingredients, real taste, always. Every pizza on the card is baked fresh after you order it.",
+    "Nineteen pizzas, three burgers, four combos and a choco pizza — each priced exactly as printed on our card, so what you see online is what you pay at the counter.",
     "The waffles the Wizard is famous for are next. The Waffle Zone is being perfected in the kitchen and will be announced when it is ready — not before.",
   ],
   /** Replace with confirmed company details. */
@@ -84,7 +84,7 @@ export const brandStory = {
       phase: "Phase 1",
       status: "live" as const,
       title: "Pizza",
-      description: "Classic, premium and signature pizzas, magical combos and choco pizza. Live now at our Aliganj, Lucknow outlet.",
+      description: "Nineteen vegetarian pizzas, three burgers, magical combos and choco pizza. Live now at our Aliganj, Lucknow outlet.",
     },
     {
       phase: "Phase 2",
@@ -127,7 +127,7 @@ export const faqGroups: FaqGroup[] = [
       {
         question: "Can I choose the size?",
         answer:
-          "Yes. Every pizza comes in Regular (6\"), Medium (9\") and Large (12\"), priced exactly as on our menu card. Pick the size on the card or on the pizza's page, then add extras such as extra cheese, jalapeños, olives, mushroom or paneer.",
+          "Yes. Pizzas come in Small (6\"), Medium (9\") and Large (12\"), priced exactly as on our menu card. Pick the size on the card or on the pizza's page, and add extra cheese if you want it. Burgers come in one size.",
       },
       {
         question: "Are the prices the same as the menu card?",
@@ -166,7 +166,7 @@ export const faqGroups: FaqGroup[] = [
       },
       {
         question: "Do you have allergen information?",
-        answer: "Each pizza lists its ingredients on its page. For specific allergen questions, contact the outlet before ordering so the kitchen can confirm.",
+        answer: "Every item lists its ingredients on its page. For specific allergen questions, contact the outlet before ordering so the kitchen can confirm.",
       },
       {
         question: "When is the Waffle Zone launching?",
@@ -198,10 +198,10 @@ export const faqGroups: FaqGroup[] = [
  * the business's own ("Co-Founders"); nothing else is asserted about them.
  */
 export const foundersCard = {
-  photo: "/founders/founders.jpg",
+  photo: "/founders/founders-v2.jpg",
   /** Original photo dimensions, for the modal's intrinsic sizing. */
-  photoWidth: 934,
-  photoHeight: 1400,
+  photoWidth: 1024,
+  photoHeight: 1188,
   names: siteConfig.founders,
   role: "Co-Founders",
 };

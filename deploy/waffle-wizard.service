@@ -20,6 +20,10 @@ Environment=PORT=3001
 Environment=HOSTNAME=127.0.0.1
 # Set this to the real site origin so sitemap and share links are correct.
 Environment=NEXT_PUBLIC_SITE_URL=https://REPLACE-WITH-YOUR-DOMAIN
+# Google Places key — reads the outlet's live rating once a day. Optional: drop
+# this line and the site falls back to the snapshot in src/lib/config/site.ts.
+# Keep it server-side only; never prefix it with NEXT_PUBLIC_.
+Environment=GOOGLE_PLACES_API_KEY=REPLACE-WITH-YOUR-KEY
 ExecStart=/usr/bin/npm start
 Restart=always
 RestartSec=5

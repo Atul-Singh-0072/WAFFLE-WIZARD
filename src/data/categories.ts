@@ -2,7 +2,7 @@ import { media } from "@/data/media";
 import type { Category } from "@/types";
 
 /**
- * Category table — mirrors the sections of the official menu card.
+ * Category table — the sections of the menu card.
  *
  * Launching a new range is a data edit, never a rebuild: set
  * `availability: "live"` and a `launchPhase` at or below siteConfig.launchPhase
@@ -12,38 +12,27 @@ import type { Category } from "@/types";
  */
 export const categories: Category[] = [
   {
-    id: "cat-classic",
-    slug: "classic-pizzas",
-    name: "Classic Pizzas",
-    tagline: "Simple. Tasty. Always a hit!",
-    description: "The everyday favourites — cheese-forward, freshly baked, priced for a regular treat.",
-    image: media.pizza.margherita,
+    id: "cat-pizza",
+    slug: "pizza",
+    name: "Pizza",
+    tagline: "Hot · Fresh · Delicious",
+    description:
+      "Nineteen pizzas, all vegetarian, all baked to order. Small, medium and large — priced exactly as on our card.",
+    image: media.pizza.cheesePull,
     icon: "Pizza",
     order: 1,
     availability: "live",
     launchPhase: 1,
   },
   {
-    id: "cat-premium",
-    slug: "premium-pizzas",
-    name: "Premium Pizzas",
-    tagline: "Indulge in rich & royal flavors!",
-    description: "Loaded builds with more toppings, more sauce and more cheese.",
-    image: media.pizza.mushroomSupreme,
-    icon: "Crown",
+    id: "cat-burgers",
+    slug: "burgers",
+    name: "Burgers",
+    tagline: "Soft bun, big filling",
+    description: "Three vegetarian burgers — pizza-style, tandoori and paneer.",
+    image: media.burger.garden,
+    icon: "Sandwich",
     order: 2,
-    availability: "live",
-    launchPhase: 1,
-  },
-  {
-    id: "cat-signature",
-    slug: "signature-pizzas",
-    name: "Signature Pizzas",
-    tagline: "Our Special Creations!",
-    description: "The Wizard's own recipes — extra cheese, extra happiness.",
-    image: media.pizza.cheesyBlast,
-    icon: "Sparkles",
-    order: 3,
     availability: "live",
     launchPhase: 1,
   },
@@ -53,9 +42,9 @@ export const categories: Category[] = [
     name: "Magical Combos",
     tagline: "More Pizza · More Fun · More Savings",
     description: "Pizza with a drink — or a full spread with fries — at a lower price than ordering apart.",
-    image: media.pizza.veggieDelight,
+    image: media.pizza.gardenVeg,
     icon: "Package",
-    order: 4,
+    order: 3,
     availability: "live",
     launchPhase: 1,
   },
@@ -67,7 +56,7 @@ export const categories: Category[] = [
     description: "A dessert pizza with chocolate and toppings, in three sizes.",
     image: media.poster.chocoPizza,
     icon: "IceCreamCone",
-    order: 5,
+    order: 4,
     availability: "live",
     launchPhase: 1,
   },
@@ -83,7 +72,7 @@ export const categories: Category[] = [
       "Belgian-style waffles — classic, premium, fruit and savoury — are being perfected in the kitchen. Not available to order yet.",
     image: media.waffles.classic,
     icon: "Grid2x2",
-    order: 6,
+    order: 5,
     availability: "coming-soon",
     launchPhase: 2,
     comingSoonNote: "Coming soon",
@@ -92,18 +81,6 @@ export const categories: Category[] = [
   /* ---------------- Parked: flip to "live" to relaunch ---------------- */
 
   {
-    id: "cat-buffalo",
-    slug: "buffalo",
-    name: "Buffalo",
-    tagline: "Slow-cooked & sauced",
-    description: "A buffalo-based range in development.",
-    image: media.pizza.classic,
-    icon: "Flame",
-    order: 7,
-    availability: "hidden",
-    launchPhase: 2,
-  },
-  {
     id: "cat-sides",
     slug: "sides",
     name: "Sides",
@@ -111,7 +88,7 @@ export const categories: Category[] = [
     description: "Garlic breads, loaded fries and crisp bites built to share.",
     image: media.sides.fries,
     icon: "Drumstick",
-    order: 8,
+    order: 6,
     availability: "hidden",
     launchPhase: 1,
   },

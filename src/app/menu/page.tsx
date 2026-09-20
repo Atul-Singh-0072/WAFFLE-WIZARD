@@ -38,7 +38,7 @@ export default async function MenuPage() {
             <br className="hidden sm:block" /> <span className="text-foil">Delicious.</span>
           </>
         }
-        description={"Every pizza in Regular (6\"), Medium (9\") and Large (12\"), priced exactly as printed on our card. Search by name or ingredient, or jump straight to a section."}
+        description={"Pizzas in Small (6\"), Medium (9\") and Large (12\"), priced exactly as printed on our card. Burgers, combos and choco pizza too — search by name or ingredient, or jump straight to a section."}
       />
       <Suspense fallback={<MenuFallback />}>
         <MenuBrowser products={products} categories={categories} />

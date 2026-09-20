@@ -24,7 +24,7 @@ export function buildMetadata({
   title,
   description,
   path = "/",
-  image = media.pizza.cheesyBlast,
+  image = media.pizza.cheesePull,
   noIndex = false,
   type = "website",
 }: BuildMetadataInput): Metadata {

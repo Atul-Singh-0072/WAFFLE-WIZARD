@@ -41,7 +41,7 @@ export function Header() {
             : "border-b border-transparent bg-background/0",
         )}
       >
-        <div className="container-page flex h-full items-center gap-3">
+        <div className="container-page flex h-full items-center gap-2 min-[360px]:gap-3">
           <button
             type="button"
             onClick={() => setMenuOpen(true)}
@@ -88,7 +88,8 @@ export function Header() {
           <div className="ml-auto flex items-center gap-2">
             <LocationPill />
 
-            <ThemeToggle />
+            {/* Below sm the drawer carries it — three 44px buttons overflow a 360px header. */}
+            <ThemeToggle className="hidden sm:flex" />
 
             <button
               type="button"

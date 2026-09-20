@@ -52,10 +52,10 @@ export const siteConfig = {
       { display: "9473677414", raw: "919473677414" },
     ],
     whatsappMessage: "Hi Waffle Wizard! I'd like to place an order.",
-    email: "mr.pizzawizard@gmail.com",
-    support: "mr.pizzawizard@gmail.com",
-    franchise: "mr.pizzawizard@gmail.com",
-    careers: "mr.pizzawizard@gmail.com",
+    email: "wafflewizard.live@gmail.com",
+    support: "wafflewizard.live@gmail.com",
+    franchise: "wafflewizard.live@gmail.com",
+    careers: "wafflewizard.live@gmail.com",
     hours: "10:00 AM - 11:00 PM, all days",
   },
 
@@ -69,7 +69,19 @@ export const siteConfig = {
   },
 
   social: {
-    instagram: "[INSTAGRAM URL]",
+    instagram: "https://www.instagram.com/wafflewizard.inn/",
+    /**
+     * Opens the "write a review" box on the outlet's Google Business listing.
+     * The place id is derived from the feature id in the business's own Maps
+     * link (0x399957000ea8edaf:0xcc44f056c67ff0f5) and verified to resolve to
+     * Waffle Wizard, Sector C, Aliganj. It is stable for the life of the
+     * listing — it only changes if the listing itself is recreated.
+     */
+    googleReview: "https://search.google.com/local/writereview?placeid=ChIJr-2oDgBXmTkR9fB_xlbwRMw",
+    /** The listing itself — reviews, photos, directions. */
+    googleMaps: "https://maps.google.com/?cid=14719153737641750773",
+    /** Same listing, as the id the Places API takes. See services/google-place.ts. */
+    googlePlaceId: "ChIJr-2oDgBXmTkR9fB_xlbwRMw",
     facebook: "[FACEBOOK URL]",
     youtube: "[YOUTUBE URL]",
     x: "[X / TWITTER URL]",
@@ -102,7 +114,21 @@ export const siteConfig = {
    */
   socialProof: {
     customerCount: "[CUSTOMER COUNT]",
-    rating: "[RATING]",
+    /**
+     * Read off the outlet's own Google Business listing on 21 Sep 2026.
+     *
+     * FALLBACK ONLY. When GOOGLE_PLACES_API_KEY is set, the live figures come
+     * from the Places API once a day (services/google-place.ts) and these are
+     * never shown. They exist so the badge still renders — with honest, if
+     * stale, numbers — in dev, in CI, and if Google ever fails to answer.
+     *
+     * Deliberately NOT emitted as schema.org aggregateRating: Google's
+     * structured-data policy forbids republishing another site's ratings as
+     * your own markup.
+     */
+    googleRating: "5.0",
+    googleReviewCount: "23",
+    googleAsOf: "September 2026",
   },
 
   seo: {

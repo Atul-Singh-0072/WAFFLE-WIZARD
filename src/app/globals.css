@@ -394,6 +394,41 @@
     padding-inline: 1.25rem;
   }
 
+  /* Small Androids and the SE: buy back 8px so the header row fits. */
+  @media (max-width: 359px) {
+    .container-page {
+      padding-inline: 1rem;
+    }
+  }
+
+  /* Edge-to-edge scroll rails. The negative margin and scroll padding must
+     track .container-page exactly at every breakpoint — hardcoding -mx-5
+     made the row poke 4px past the viewport once the 320px step landed. */
+  .bleed-rail {
+    --bleed: 1.25rem;
+    margin-inline: calc(var(--bleed) * -1);
+    padding-inline: var(--bleed);
+    scroll-padding-inline: var(--bleed);
+  }
+
+  @media (max-width: 359px) {
+    .bleed-rail {
+      --bleed: 1rem;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .bleed-rail {
+      --bleed: 2rem;
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .bleed-rail {
+      --bleed: 2.5rem;
+    }
+  }
+
   @media (min-width: 768px) {
     .container-page {
       padding-inline: 2rem;
@@ -873,93 +908,240 @@
 }
 
 /* ================================================================== */
-/* FOOTER REVIEW TICKER                                                */
-/* One short phrase at a time: rises in, holds, lifts out.             */
+/* COMMENT FLOW                                                        */
+/* Reviews rise from the bottom and fade out at the top, the way live  */
+/* comments and hearts do. Pure CSS on a staggered loop — no timers,   */
+/* so there is nothing to hydrate and nothing to drift out of sync.    */
 /* ================================================================== */
 
-.review-ticker {
+.comment-flow {
   position: relative;
-  min-height: 7.25rem;
-  border-radius: var(--radius-lg);
-  border: 1px solid rgba(255, 207, 31, 0.28);
-  background:
-    radial-gradient(120% 90% at 0% 0%, rgba(255, 207, 31, 0.1), transparent 60%),
-    rgba(255, 255, 255, 0.04);
-  padding: 1.1rem 1.15rem 0.95rem;
-  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.5) inset;
+  height: 11.5rem;
   overflow: hidden;
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(255, 207, 31, 0.24);
+  background:
+    radial-gradient(120% 80% at 50% 100%, rgba(255, 207, 31, 0.1), transparent 65%),
+    rgba(255, 255, 255, 0.04);
+  /* Fade both ends so items appear and vanish instead of clipping. */
+  -webkit-mask-image: linear-gradient(to top, transparent 0%, #000 26%, #000 74%, transparent 100%);
+  mask-image: linear-gradient(to top, transparent 0%, #000 26%, #000 74%, transparent 100%);
 }
 
-.review-ticker__quote {
+.comment-flow__list {
   position: absolute;
-  right: 0.9rem;
-  top: 0.8rem;
-  width: 1.6rem;
-  height: 1.6rem;
-  color: rgba(255, 207, 31, 0.35);
-}
-
-.review-ticker__msg {
+  inset: 0;
   margin: 0;
-  padding-right: 2rem;
-  font-family: var(--font-bricolage), system-ui, sans-serif;
-  font-size: 1.35rem;
-  font-weight: 800;
-  line-height: 1.15;
-  letter-spacing: -0.02em;
-  color: #fff8ea;
-  animation: rt-in 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
-}
-
-.review-ticker__msg.is-leaving {
-  animation: rt-out 0.4s ease-in both;
-}
-
-.review-ticker__dots {
-  display: flex;
-  gap: 0.35rem;
-  margin: 0.9rem 0 0;
   padding: 0;
   list-style: none;
 }
 
-.review-ticker__dots li {
-  width: 0.4rem;
-  height: 0.4rem;
+.comment-flow__item {
+  position: absolute;
+  left: 0.9rem;
+  right: 0.9rem;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  opacity: 0;
+  animation: comment-rise var(--flow-duration, 13s) linear infinite;
+  animation-delay: var(--flow-delay, 0s);
+  will-change: transform, opacity;
+}
+
+.comment-flow__avatar {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 1.65rem;
+  height: 1.65rem;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.18);
+  background: linear-gradient(140deg, var(--secondary), var(--accent));
+  color: #1a1024;
+  font-size: 0.62rem;
+  font-weight: 800;
+}
+
+.comment-flow__text {
+  font-family: var(--font-bricolage), system-ui, sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  line-height: 1.2;
+  color: #fff8ea;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.5);
+}
+
+/* Hearts drifting up the right edge, as on a live stream. */
+.comment-flow__hearts {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.comment-flow__hearts i {
+  position: absolute;
+  bottom: -1rem;
+  right: var(--x, 1rem);
+  font-style: normal;
+  font-size: var(--size, 0.85rem);
+  opacity: 0;
+  animation: heart-rise var(--dur, 6s) ease-in infinite;
+  animation-delay: var(--delay, 0s);
+}
+
+@keyframes comment-rise {
+  /* Travel is in rem, not %, so it clears the full 11.5rem box whatever
+     the comment wraps to — a % here is relative to the item, not the box. */
+  0% {
+    transform: translateY(2.5rem);
+    opacity: 0;
+  }
+  12% {
+    opacity: 1;
+  }
+  82% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-12rem);
+    opacity: 0;
+  }
+}
+
+@keyframes heart-rise {
+  0% {
+    transform: translateY(0) scale(0.7);
+    opacity: 0;
+  }
+  18% {
+    opacity: 0.9;
+  }
+  70% {
+    opacity: 0.7;
+  }
+  100% {
+    transform: translateY(-9rem) translateX(var(--drift, -0.6rem)) scale(1.1);
+    opacity: 0;
+  }
+}
+
+/* Reduced motion: hold the stream still and just list the comments. */
+@media (prefers-reduced-motion: reduce) {
+  .comment-flow {
+    height: auto;
+    -webkit-mask-image: none;
+    mask-image: none;
+    padding: 0.9rem;
+  }
+
+  .comment-flow__list {
+    position: static;
+    display: grid;
+    gap: 0.6rem;
+  }
+
+  .comment-flow__item {
+    position: static;
+    opacity: 1;
+    animation: none;
+  }
+
+  .comment-flow__hearts {
+    display: none;
+  }
+}
+
+/* ================================================================== */
+/* GOOGLE RATING                                                       */
+/* A grey star row with a gold copy clipped to the score, so a 4.7 or  */
+/* a 5.0 both render correctly without per-value markup.               */
+/* ================================================================== */
+
+.gstars {
+  position: relative;
+  display: inline-flex;
+  line-height: 0;
+}
+
+.gstars__row {
+  display: inline-flex;
+  gap: 0.09rem;
+  width: max-content;
+}
+
+.gstars__base {
+  color: var(--muted);
+  opacity: 0.38;
+}
+
+.gstars__fill {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 0;
+  width: var(--pct, 100%);
+  overflow: hidden;
+  color: var(--secondary);
+}
+
+.gstars__fill svg {
+  fill: currentColor;
+}
+
+/* ================================================================== */
+/* RATE US                                                             */
+/* ================================================================== */
+
+.rate-stars {
+  display: inline-flex;
+  gap: 0.15rem;
+}
+
+.rate-star {
+  display: grid;
+  place-items: center;
+  padding: 0.15rem;
+  color: rgba(255, 255, 255, 0.3);
+  background: none;
+  border: 0;
+  cursor: pointer;
   transition:
-    width 0.35s ease,
-    background-color 0.35s ease;
+    color 0.18s ease,
+    transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-.review-ticker__dots li.is-active {
-  width: 1.1rem;
-  background: var(--secondary);
+.rate-star.is-on {
+  color: var(--secondary);
 }
 
-@keyframes rt-in {
+.rate-star.is-on svg {
+  fill: currentColor;
+}
+
+.rate-star:hover,
+.rate-star:focus-visible {
+  transform: scale(1.18);
+}
+
+.rate-star.is-pop {
+  animation: rate-pop 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) var(--pop-delay, 0ms) both;
+}
+
+@keyframes rate-pop {
   0% {
-    opacity: 0;
-    transform: translateY(0.6rem);
-    filter: blur(4px);
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(1.45) rotate(-8deg);
   }
   100% {
-    opacity: 1;
-    transform: none;
-    filter: none;
+    transform: scale(1);
   }
 }
 
-@keyframes rt-out {
-  0% {
-    opacity: 1;
-    transform: none;
-  }
-  100% {
-    opacity: 0;
-    transform: translateY(-0.5rem);
-    filter: blur(3px);
+@media (prefers-reduced-motion: reduce) {
+  .rate-star.is-pop {
+    animation: none;
   }
 }
 

@@ -44,13 +44,13 @@ export const metadata: Metadata = {
     locale: siteConfig.locale,
     title: `${siteConfig.name} — ${siteConfig.tagline}`,
     description: siteConfig.description,
-    images: [{ url: media.pizza.cheesyBlast, width: 1200, height: 630, alt: siteConfig.name }],
+    images: [{ url: media.pizza.cheesePull, width: 1200, height: 630, alt: siteConfig.name }],
   },
   twitter: {
     card: "summary_large_image",
     title: `${siteConfig.name} — ${siteConfig.tagline}`,
     description: siteConfig.description,
-    images: [media.pizza.cheesyBlast],
+    images: [media.pizza.cheesePull],
   },
   robots: { index: true, follow: true },
 };

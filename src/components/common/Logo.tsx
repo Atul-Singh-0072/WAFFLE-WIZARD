@@ -31,12 +31,16 @@ interface LogoProps {
 
 /**
  * Responsive heights: the mark scales up from phone to desktop. Below `md`
- * the wordmark stacks on two lines so the header row never overflows a
- * 360-390px phone with hamburger, location and cart controls beside it.
+ * the wordmark stacks on two lines, and below 360px the whole lockup steps
+ * down again, so the header row never overflows a 320px phone carrying a
+ * hamburger, location pill and cart button beside it.
  */
 const lockupSizes = {
   sm: { mark: "h-11", text: "text-[16px] md:text-[20px]" },
-  md: { mark: "h-[52px] lg:h-[60px]", text: "text-[17px] md:text-[21px] lg:text-[25px]" },
+  md: {
+    mark: "h-11 min-[360px]:h-[52px] lg:h-[60px]",
+    text: "text-[15px] min-[360px]:text-[17px] md:text-[21px] lg:text-[25px]",
+  },
   lg: { mark: "h-16 lg:h-[72px]", text: "text-[20px] md:text-[26px] lg:text-[30px]" },
 };
 

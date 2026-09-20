@@ -1,4 +1,5 @@
 import { BadgeCheck, Info, Quote } from "lucide-react";
+import { GoogleRating } from "@/components/common/GoogleRating";
 import { Rail } from "@/components/common/Rail";
 import { Reveal } from "@/components/common/Reveal";
 import { Rating } from "@/components/ui/Rating";
@@ -22,15 +23,9 @@ export function Reviews({ reviews, summary }: ReviewsProps) {
           <SectionHeading
             eyebrow="Customers"
             title={<span id="reviews-heading">What people say after the first slice</span>}
-            action={
-              <div className="flex items-center gap-3 rounded-full border border-border bg-surface px-4 py-2">
-                <span className="font-display text-2xl font-extrabold tabular text-text">{summary.average.toFixed(1)}</span>
-                <div className="leading-tight">
-                  <Rating value={summary.average} />
-                  <p className="text-[11px] text-muted">{summary.count} reviews</p>
-                </div>
-              </div>
-            }
+            /* The real Google score, not the average of the sample cards
+               below — those are clearly labelled as placeholder content. */
+            action={<GoogleRating />}
           />
         </Reveal>
 

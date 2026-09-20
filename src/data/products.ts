@@ -2,14 +2,14 @@ import { media } from "@/data/media";
 import type { AddonGroup, Option, Product, VariantGroup } from "@/types";
 
 /**
- * MENU CATALOG — names, categories, sizes and prices are copied EXACTLY from
- * the official Waffle Wizard menu card (the poster). Do not edit a price
- * here without the business confirming it on the card first.
+ * MENU CATALOG.
  *
- * Deliberately omitted per the brand's 100% vegetarian rule: Chicken Tikka,
- * BBQ Chicken, Tandoori Chicken, Indi BBQ Chicken and the "Chicken" add-on.
+ * Pizza and burger names and prices are exactly as the business supplied them
+ * on 2026-09-20. Do not edit a price here without them confirming it first.
  *
- * Ratings and review counts are indicative sample data (see footer disclaimer).
+ * The whole menu is vegetarian. Photography is licensed stock standing in for
+ * the outlet's own shoot (see src/data/media.ts); ratings and review counts are
+ * indicative sample data, flagged by the footer disclaimer.
  */
 
 /* ------------------------------------------------------------------ */
@@ -20,83 +20,49 @@ function option(id: string, name: string, priceDelta: number, extra: Partial<Opt
   return { id, name, priceDelta, available: true, ...extra };
 }
 
-/** Regular 6" / Medium 9" / Large 12" priced exactly as printed. Base price = Regular. */
-function sizes(regular: number, medium: number, large: number): VariantGroup {
+/** Small / Medium / Large priced exactly as supplied. Base price = Small. */
+function sizes(small: number, medium: number, large: number): VariantGroup {
   return {
     id: "size",
     name: "Choose size",
-    hint: "Prices as printed on the menu card",
+    hint: "Prices as on our menu card",
     required: true,
     type: "single",
     priceMode: "absolute",
     options: [
-      option("regular", 'Regular (6")', 0, { isDefault: true, description: "Serves 1" }),
-      option("medium", 'Medium (9")', medium - regular, { description: "Serves 2", badge: "Popular" }),
-      option("large", 'Large (12")', large - regular, { description: "Serves 3-4" }),
+      option("small", 'Small (6")', 0, { isDefault: true, description: "Serves 1" }),
+      option("medium", 'Medium (9")', medium - small, { description: "Serves 2", badge: "Most ordered" }),
+      option("large", 'Large (12")', large - small, { description: "Serves 3-4" }),
     ],
   };
 }
 
-/** "Make It Extra Delicious!" — add-ons exactly as printed (chicken omitted). */
+/** The one extra on the card. */
 const addOns: AddonGroup = {
   id: "add-ons",
   name: "Add-ons",
   hint: "Make it extra delicious",
   required: false,
   type: "multi",
-  options: [
-    option("extra-cheese", "Extra Cheese", 30, { diet: "veg", badge: "Popular" }),
-    option("extra-toppings", "Extra Toppings", 20, { diet: "veg" }),
-    option("jalapenos", "Jalapeños", 20, { diet: "veg" }),
-    option("olives", "Olives", 15, { diet: "veg" }),
-    option("mushroom", "Mushroom", 20, { diet: "veg" }),
-    option("paneer", "Paneer", 25, { diet: "veg" }),
-  ],
+  options: [option("extra-cheese", "Extra Cheese", 25, { diet: "veg", badge: "Popular" })],
 };
-
-const classicNames = ["Margherita (Cheese Burst)", "Veggie Delight", "Farm House", "Paneer Tikka", "Spicy Veg"];
-const premiumNames = ["Mexican Hot", "Loaded Veg", "Mushroom Supreme"];
-const signatureNames = ["Peri Peri Paneer", "Cheesy Blast", "Double Cheese"];
-const allPizzaNames = [...classicNames, ...premiumNames, ...signatureNames];
-
-const slugOf = (name: string) =>
-  name
-    .toLowerCase()
-    .replace(/[()]/g, "")
-    .trim()
-    .replace(/[^a-z0-9]+/g, "-");
-
-function pickOne(id: string, name: string, names: string[]): VariantGroup {
-  return {
-    id,
-    name,
-    required: true,
-    type: "single",
-    options: names.map((n, i) => option(slugOf(n), n, 0, { diet: "veg", isDefault: i === 0 })),
-  };
-}
-
-function pickMany(id: string, name: string, hint: string, names: string[], max: number): AddonGroup {
-  return {
-    id,
-    name,
-    hint,
-    required: false,
-    type: "multi",
-    max,
-    options: names.map((n) => option(slugOf(n), n, 0, { diet: "veg" })),
-  };
-}
 
 /* ------------------------------------------------------------------ */
 /* Pizza builder                                                       */
 /* ------------------------------------------------------------------ */
 
+const slugOf = (name: string) =>
+  name
+    .toLowerCase()
+    .replace(/[()&]/g, " ")
+    .trim()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+
 interface PizzaSpec {
-  id: string;
   name: string;
-  categoryId: string;
-  prices: [number, number, number];
+  /** [small, medium, large]; a single number means one size only. */
+  prices: [number, number, number] | [number];
   image: string;
   altImage: string;
   description: string;
@@ -109,19 +75,20 @@ interface PizzaSpec {
 }
 
 function pizza(spec: PizzaSpec): Product {
-  const [regular, medium, large] = spec.prices;
+  const multiSize = spec.prices.length === 3;
+  const [small, medium, large] = spec.prices as [number, number, number];
   return {
-    id: spec.id,
+    id: `p-${slugOf(spec.name)}`,
     slug: slugOf(spec.name),
     name: spec.name,
     description: spec.description,
     ingredients: spec.ingredients,
     images: [spec.image, spec.altImage],
-    categoryId: spec.categoryId,
-    basePrice: regular,
+    categoryId: "cat-pizza",
+    basePrice: small,
     diet: "veg",
     tags: spec.tags ?? [],
-    variants: [sizes(regular, medium, large)],
+    variants: multiSize ? [sizes(small, medium, large)] : [],
     addons: [addOns],
     availability: "live",
     featured: spec.featured ?? false,
@@ -129,192 +96,337 @@ function pizza(spec: PizzaSpec): Product {
     isNew: false,
     rating: spec.rating,
     ratingCount: spec.ratingCount,
-    serves: "1-4 depending on size",
+    serves: multiSize ? "1-4 depending on size" : "1",
     prepTimeMins: 15,
   };
 }
+
+const BASE = ["Fresh hand-stretched dough", "Tomato sauce", "Mozzarella"];
 
 /* ------------------------------------------------------------------ */
 /* Catalog                                                             */
 /* ------------------------------------------------------------------ */
 
 export const products: Product[] = [
-  /* --------------------------- Classic Pizzas --------------------------- */
+  /* ------------------------------- Pizza ---------------------------- */
   pizza({
-    id: "p-margherita",
-    name: "Margherita (Cheese Burst)",
-    categoryId: "cat-classic",
-    prices: [69, 109, 169],
-    image: media.pizza.margherita,
-    altImage: media.pizza.classic,
-    description: "Tomato sauce, a thick blanket of mozzarella and a cheese-burst crust.",
-    ingredients: ["Fresh dough", "Tomato sauce", "Mozzarella", "Cheese-burst crust", "Oregano"],
-    tags: ["bestseller", "value"],
+    name: "Tomato Pizza",
+    prices: [69, 119, 159],
+    image: media.pizza.tomatoPepper,
+    altImage: media.pizza.basilStone,
+    description: "Fresh tomato over mozzarella. Simple, and it has to be right.",
+    ingredients: [...BASE, "Fresh tomato", "Oregano"],
+    tags: ["value", "bestseller"],
+    featured: true,
+    bestseller: true,
+    rating: 4.6,
+    ratingCount: 312,
+  }),
+  pizza({
+    name: "Onion Pizza",
+    prices: [69, 119, 159],
+    image: media.pizza.onionWhite,
+    altImage: media.pizza.plainCheese,
+    description: "Sweet red onion, sliced thin and baked into the cheese.",
+    ingredients: [...BASE, "Red onion", "Oregano"],
+    tags: ["value"],
+    rating: 4.5,
+    ratingCount: 198,
+  }),
+  pizza({
+    name: "Onion Capsicum Pizza",
+    prices: [79, 129, 179],
+    image: media.pizza.loadedVeggie,
+    altImage: media.pizza.gardenVeg,
+    description: "Onion and capsicum — the pairing most people come back for.",
+    ingredients: [...BASE, "Red onion", "Capsicum"],
+    tags: ["value", "bestseller"],
     featured: true,
     bestseller: true,
     rating: 4.7,
-    ratingCount: 512,
+    ratingCount: 386,
   }),
   pizza({
-    id: "p-veggie-delight",
-    name: "Veggie Delight",
-    categoryId: "cat-classic",
-    prices: [79, 129, 189],
-    image: media.pizza.veggieDelight,
-    altImage: media.pizza.tomatoBasil,
-    description: "Capsicum, onion, tomato and sweet corn over mozzarella.",
-    ingredients: ["Fresh dough", "Tomato sauce", "Mozzarella", "Capsicum", "Onion", "Tomato", "Sweet corn"],
+    name: "Golden Corn Pizza",
+    prices: [89, 149, 209],
+    image: media.pizza.basilClassic,
+    altImage: media.pizza.cheesePull,
+    description: "Sweet corn kernels under a thick blanket of cheese.",
+    ingredients: [...BASE, "Sweet corn"],
     tags: ["value"],
-    featured: true,
     rating: 4.6,
-    ratingCount: 388,
+    ratingCount: 241,
   }),
   pizza({
-    id: "p-farm-house",
-    name: "Farm House",
-    categoryId: "cat-classic",
-    prices: [89, 149, 219],
-    image: media.pizza.farmHouse,
-    altImage: media.pizza.ovenFresh,
-    description: "Mushroom, capsicum, onion and tomato — the garden on a base.",
-    ingredients: ["Fresh dough", "Tomato sauce", "Mozzarella", "Mushroom", "Capsicum", "Onion", "Tomato"],
+    name: "Corn Paneer Pizza",
+    prices: [99, 169, 239],
+    image: media.pizza.pepperMargherita,
+    altImage: media.pizza.loadedVeggie,
+    description: "Sweet corn and soft paneer cubes together.",
+    ingredients: [...BASE, "Sweet corn", "Paneer"],
     tags: ["bestseller"],
     bestseller: true,
-    rating: 4.6,
-    ratingCount: 341,
-  }),
-  pizza({
-    id: "p-paneer-tikka",
-    name: "Paneer Tikka",
-    categoryId: "cat-classic",
-    prices: [89, 149, 219],
-    image: media.pizza.paneerTikka,
-    altImage: media.pizza.loadedVeg,
-    description: "Tandoori-marinated paneer, onion and capsicum with a tikka drizzle.",
-    ingredients: ["Fresh dough", "Tomato sauce", "Mozzarella", "Paneer tikka", "Onion", "Capsicum", "Tikka sauce"],
-    tags: ["bestseller", "chefs-pick"],
-    featured: true,
-    bestseller: true,
-    rating: 4.8,
-    ratingCount: 467,
-  }),
-  pizza({
-    id: "p-spicy-veg",
-    name: "Spicy Veg",
-    categoryId: "cat-classic",
-    prices: [79, 129, 189],
-    image: media.pizza.spicyVeg,
-    altImage: media.pizza.veggieDelight,
-    description: "Jalapeños, red paprika and onion with a chilli-flake finish.",
-    ingredients: ["Fresh dough", "Spicy tomato sauce", "Mozzarella", "Jalapeños", "Red paprika", "Onion", "Chilli flakes"],
-    tags: ["spicy"],
-    rating: 4.5,
-    ratingCount: 276,
-  }),
-
-  /* --------------------------- Premium Pizzas --------------------------- */
-  pizza({
-    id: "p-mexican-hot",
-    name: "Mexican Hot",
-    categoryId: "cat-premium",
-    prices: [109, 179, 269],
-    image: media.pizza.mexicanHot,
-    altImage: media.pizza.spicyVeg,
-    description: "Jalapeños, sweet corn, olives and capsicum on a peri-spiced sauce.",
-    ingredients: ["Fresh dough", "Peri-spiced sauce", "Mozzarella", "Jalapeños", "Sweet corn", "Black olives", "Capsicum"],
-    tags: ["spicy", "chefs-pick"],
-    featured: true,
-    rating: 4.6,
-    ratingCount: 298,
-  }),
-  pizza({
-    id: "p-loaded-veg",
-    name: "Loaded Veg",
-    categoryId: "cat-premium",
-    prices: [99, 159, 239],
-    image: media.pizza.loadedVeg,
-    altImage: media.pizza.veggieDelight,
-    description: "Everything on it — mushroom, corn, capsicum, onion, tomato and olives.",
-    ingredients: ["Fresh dough", "Tomato sauce", "Mozzarella", "Mushroom", "Sweet corn", "Capsicum", "Onion", "Tomato", "Black olives"],
-    tags: ["bestseller", "value"],
-    bestseller: true,
     rating: 4.7,
-    ratingCount: 354,
+    ratingCount: 274,
   }),
   pizza({
-    id: "p-mushroom-supreme",
-    name: "Mushroom Supreme",
-    categoryId: "cat-premium",
-    prices: [109, 179, 269],
-    image: media.pizza.mushroomSupreme,
-    altImage: media.pizza.farmHouse,
-    description: "A double load of button mushrooms with garlic butter and herbs.",
-    ingredients: ["Fresh dough", "Garlic-butter base", "Mozzarella", "Button mushrooms", "Mixed herbs"],
-    tags: ["chefs-pick"],
-    rating: 4.6,
-    ratingCount: 221,
-  }),
-
-  /* -------------------------- Signature Pizzas -------------------------- */
-  pizza({
-    id: "p-peri-peri-paneer",
-    name: "Peri Peri Paneer",
-    categoryId: "cat-signature",
-    prices: [109, 179, 269],
-    image: media.pizza.periPeriPaneer,
-    altImage: media.pizza.paneerTikka,
-    description: "Peri peri paneer cubes, onion and capsicum. Genuinely hot.",
-    ingredients: ["Fresh dough", "Peri peri sauce", "Mozzarella", "Peri peri paneer", "Onion", "Capsicum"],
-    tags: ["spicy", "bestseller"],
+    name: "Margretta Pizza",
+    prices: [79, 139, 189],
+    image: media.pizza.margherita,
+    altImage: media.pizza.basilStone,
+    description: "Tomato, mozzarella, basil. The one that tests a kitchen.",
+    ingredients: [...BASE, "Fresh basil"],
+    tags: ["value", "bestseller"],
     featured: true,
     bestseller: true,
     rating: 4.7,
-    ratingCount: 302,
+    ratingCount: 428,
   }),
   pizza({
-    id: "p-cheesy-blast",
-    name: "Cheesy Blast",
-    categoryId: "cat-signature",
-    prices: [129, 209, 309],
-    image: media.pizza.cheesyBlast,
-    altImage: media.pizza.doubleCheese,
-    description: "Extra cheese, extra happiness — a molten pull in every slice.",
-    ingredients: ["Fresh dough", "Tomato sauce", "Mozzarella", "Cheddar", "Cheese-burst crust", "Capsicum", "Olives"],
+    name: "Cheese Burst Pizza",
+    prices: [109, 189, 269],
+    image: media.pizza.cheesePull,
+    altImage: media.pizza.plainCheese,
+    description: "Molten cheese sealed into the crust. Pull it apart slowly.",
+    ingredients: [...BASE, "Cheese-burst crust", "Extra mozzarella"],
     tags: ["signature", "bestseller"],
     featured: true,
     bestseller: true,
     rating: 4.9,
-    ratingCount: 486,
+    ratingCount: 512,
   }),
   pizza({
-    id: "p-double-cheese",
-    name: "Double Cheese",
-    categoryId: "cat-signature",
-    prices: [139, 229, 339],
-    image: media.pizza.doubleCheese,
-    altImage: media.pizza.cheesyBlast,
-    description: "Two cheeses, twice the amount, nothing in the way.",
-    ingredients: ["Fresh dough", "Tomato sauce", "Double mozzarella", "Cheddar"],
+    name: "Capsicum Paneer Pizza",
+    prices: [109, 189, 269],
+    image: media.pizza.gardenVeg,
+    altImage: media.pizza.loadedVeggie,
+    description: "Crisp capsicum with paneer cubes, baked till just golden.",
+    ingredients: [...BASE, "Capsicum", "Paneer"],
     tags: ["chefs-pick"],
+    rating: 4.6,
+    ratingCount: 219,
+  }),
+  pizza({
+    name: "Onion Capsicum Paneer Pizza",
+    prices: [119, 209, 299],
+    image: media.pizza.arugulaThin,
+    altImage: media.pizza.gardenVeg,
+    description: "Onion, capsicum and paneer — all three, properly loaded.",
+    ingredients: [...BASE, "Red onion", "Capsicum", "Paneer"],
+    tags: ["chefs-pick"],
+    featured: true,
     rating: 4.8,
-    ratingCount: 264,
+    ratingCount: 265,
+  }),
+  pizza({
+    name: "Onion Capsicum Tomato Pizza",
+    prices: [99, 179, 249],
+    image: media.pizza.basilStone,
+    altImage: media.pizza.tomatoPepper,
+    description: "The classic three, layered edge to edge.",
+    ingredients: [...BASE, "Red onion", "Capsicum", "Fresh tomato"],
+    tags: ["value"],
+    rating: 4.6,
+    ratingCount: 187,
+  }),
+  pizza({
+    name: "Peri Peri Pizza",
+    prices: [119, 209, 299],
+    image: media.pizza.mushroomTomato,
+    altImage: media.pizza.tomatoPepper,
+    description: "Peri peri seasoning through the sauce. Genuinely hot.",
+    ingredients: [...BASE, "Peri peri seasoning", "Red onion", "Capsicum"],
+    tags: ["spicy", "chefs-pick"],
+    featured: true,
+    rating: 4.7,
+    ratingCount: 298,
+  }),
+  pizza({
+    name: "Onion Paneer Pizza",
+    prices: [109, 189, 269],
+    image: media.pizza.arugulaRicotta,
+    altImage: media.pizza.pepperMargherita,
+    description: "Paneer and red onion, no distractions.",
+    ingredients: [...BASE, "Paneer", "Red onion"],
+    tags: [],
+    rating: 4.6,
+    ratingCount: 176,
+  }),
+  pizza({
+    name: "Onion Capsicum Corn Pizza",
+    prices: [89, 149, 209],
+    image: media.pizza.ovenFresh,
+    altImage: media.pizza.loadedVeggie,
+    description: "Onion, capsicum and sweet corn — crunch and sweetness together.",
+    ingredients: [...BASE, "Red onion", "Capsicum", "Sweet corn"],
+    tags: ["value"],
+    rating: 4.6,
+    ratingCount: 203,
+  }),
+  pizza({
+    name: "Paneer Tikka Pizza",
+    prices: [139, 269, 389],
+    image: media.pizza.pepperMargherita,
+    altImage: media.pizza.arugulaThin,
+    description: "Tandoori-marinated paneer with onion and capsicum.",
+    ingredients: [...BASE, "Paneer tikka", "Red onion", "Capsicum", "Tikka masala"],
+    tags: ["signature", "bestseller"],
+    featured: true,
+    bestseller: true,
+    rating: 4.8,
+    ratingCount: 391,
+  }),
+  pizza({
+    name: "Mushroom Pizza",
+    prices: [99, 179, 249],
+    image: media.pizza.whiteMushroom,
+    altImage: media.pizza.arugulaThin,
+    description: "Button mushrooms with garlic butter and herbs.",
+    ingredients: [...BASE, "Button mushroom", "Garlic butter", "Mixed herbs"],
+    tags: ["chefs-pick"],
+    rating: 4.6,
+    ratingCount: 168,
+  }),
+  pizza({
+    name: "Farm House Pizza",
+    prices: [99, 179, 249],
+    image: media.pizza.loadedVeggie,
+    altImage: media.pizza.ovenFresh,
+    description: "Mushroom, capsicum, onion and tomato — the whole garden.",
+    ingredients: [...BASE, "Button mushroom", "Capsicum", "Red onion", "Fresh tomato"],
+    tags: ["bestseller"],
+    bestseller: true,
+    rating: 4.7,
+    ratingCount: 344,
+  }),
+  pizza({
+    name: "Tandoori Pizza",
+    prices: [149, 279, 399],
+    image: media.pizza.tomatoPepper,
+    altImage: media.pizza.mushroomTomato,
+    description: "Tandoori masala base with paneer, onion and capsicum.",
+    ingredients: [...BASE, "Tandoori masala", "Paneer", "Red onion", "Capsicum"],
+    tags: ["spicy", "signature"],
+    featured: true,
+    rating: 4.8,
+    ratingCount: 226,
+  }),
+  pizza({
+    name: "Special Pizza",
+    prices: [209, 399, 559],
+    image: media.pizza.cheeseSlices,
+    altImage: media.pizza.cheesePull,
+    description: "Everything the kitchen has, on one base. Order it for the table.",
+    ingredients: [
+      ...BASE,
+      "Paneer",
+      "Button mushroom",
+      "Capsicum",
+      "Red onion",
+      "Sweet corn",
+      "Fresh tomato",
+      "Extra cheese",
+    ],
+    tags: ["signature", "chefs-pick"],
+    featured: true,
+    rating: 4.9,
+    ratingCount: 158,
+  }),
+  pizza({
+    name: "Chez & Hur",
+    prices: [59],
+    image: media.pizza.plainCheese,
+    altImage: media.pizza.cheeseSlices,
+    description: "A quick single-size pizza — cheesy, hot, ready in minutes.",
+    ingredients: [...BASE, "Herbs"],
+    tags: ["value"],
+    rating: 4.5,
+    ratingCount: 96,
   }),
 
-  /* --------------------------- Magical Combos --------------------------- */
+  /* ------------------------------ Burgers --------------------------- */
+  {
+    id: "b-pizza-burger",
+    slug: "pizza-burger",
+    name: "Pizza Burger",
+    description: "Pizza filling in a soft bun — sauce, cheese and veg.",
+    ingredients: ["Burger bun", "Pizza sauce", "Mozzarella", "Capsicum", "Red onion"],
+    images: [media.burger.garden, media.burger.crispy],
+    categoryId: "cat-burgers",
+    basePrice: 59,
+    diet: "veg",
+    tags: ["value", "bestseller"],
+    variants: [],
+    addons: [addOns],
+    availability: "live",
+    featured: false,
+    bestseller: true,
+    isNew: true,
+    rating: 4.6,
+    ratingCount: 142,
+    serves: "1",
+    prepTimeMins: 8,
+  },
+  {
+    id: "b-tandoori-burger",
+    slug: "tandoori-burger",
+    name: "Tandoori Burger",
+    description: "Tandoori-spiced patty with onion and a cooling sauce.",
+    ingredients: ["Burger bun", "Tandoori veg patty", "Red onion", "Mint sauce", "Lettuce"],
+    images: [media.burger.crispy, media.burger.stacked],
+    categoryId: "cat-burgers",
+    basePrice: 69,
+    diet: "veg",
+    tags: ["spicy"],
+    variants: [],
+    addons: [addOns],
+    availability: "live",
+    featured: false,
+    bestseller: false,
+    isNew: true,
+    rating: 4.6,
+    ratingCount: 108,
+    serves: "1",
+    prepTimeMins: 9,
+  },
+  {
+    id: "b-paneer-burger",
+    slug: "paneer-burger",
+    name: "Paneer Burger",
+    description: "A thick paneer slab, crumbed and fried, with fresh salad.",
+    ingredients: ["Burger bun", "Crumbed paneer", "Lettuce", "Tomato", "Mayo"],
+    images: [media.burger.stacked, media.burger.garden],
+    categoryId: "cat-burgers",
+    basePrice: 79,
+    diet: "veg",
+    tags: ["chefs-pick"],
+    variants: [],
+    addons: [addOns],
+    availability: "live",
+    featured: true,
+    bestseller: false,
+    isNew: true,
+    rating: 4.7,
+    ratingCount: 131,
+    serves: "1",
+    prepTimeMins: 10,
+  },
+
+  /* --------------------------- Magical Combos ----------------------- */
   {
     id: "c-classic-combo",
     slug: "classic-combo",
     name: "Classic Combo",
-    description: "Any Classic Pizza + Drink.",
-    longDescription: "Pick any classic pizza from the card and we add a chilled drink — priced below the two ordered apart.",
-    ingredients: ["Any classic pizza", "Chilled drink"],
-    images: [media.pizza.pizzeria, media.pizza.margherita],
+    description: "Any everyday pizza + a chilled drink.",
+    longDescription: "Pick any pizza from the everyday range and we add a chilled drink — cheaper than the two ordered apart.",
+    ingredients: ["Any everyday pizza", "Chilled drink"],
+    images: [media.pizza.gardenVeg, media.pizza.margherita],
     categoryId: "cat-combos",
     basePrice: 129,
     compareAtPrice: 179,
     diet: "veg",
     tags: ["value", "bestseller"],
-    variants: [pickOne("pizza", "Choose your classic pizza", classicNames)],
+    variants: [],
     addons: [addOns],
     availability: "live",
     featured: true,
@@ -329,16 +441,16 @@ export const products: Product[] = [
     id: "c-premium-combo",
     slug: "premium-combo",
     name: "Premium Combo",
-    description: "Any Premium Pizza + Drink.",
-    longDescription: "Any premium pizza with a chilled drink.",
+    description: "Any premium pizza + a chilled drink.",
+    longDescription: "Any of the paneer, peri peri or tandoori pizzas with a chilled drink.",
     ingredients: ["Any premium pizza", "Chilled drink"],
-    images: [media.pizza.veggieDelight, media.pizza.mexicanHot],
+    images: [media.pizza.mushroomTomato, media.pizza.arugulaThin],
     categoryId: "cat-combos",
     basePrice: 169,
     compareAtPrice: 249,
     diet: "veg",
     tags: ["value"],
-    variants: [pickOne("pizza", "Choose your premium pizza", premiumNames)],
+    variants: [],
     addons: [addOns],
     availability: "live",
     featured: false,
@@ -356,14 +468,14 @@ export const products: Product[] = [
     description: "2 Medium Pizzas + 2 Drinks + Fries.",
     longDescription: "Two medium pizzas of your choice, two chilled drinks and a portion of fries.",
     ingredients: ["2 medium pizzas", "2 chilled drinks", "Fries"],
-    images: [media.pizza.classic, media.sides.fries],
+    images: [media.pizza.basilStone, media.sides.fries],
     categoryId: "cat-combos",
     basePrice: 299,
     compareAtPrice: 449,
     diet: "veg",
     tags: ["value", "chefs-pick"],
     variants: [],
-    addons: [pickMany("pizzas", "Pick your 2 medium pizzas", "Choose exactly two", allPizzaNames, 2), addOns],
+    addons: [addOns],
     availability: "live",
     featured: true,
     bestseller: false,
@@ -380,14 +492,14 @@ export const products: Product[] = [
     description: "3 Large Pizzas + 3 Drinks + Fries.",
     longDescription: "Three large pizzas of your choice, three chilled drinks and fries — share the joy, double the happiness.",
     ingredients: ["3 large pizzas", "3 chilled drinks", "Fries"],
-    images: [media.pizza.tomatoBasil, media.sides.fries],
+    images: [media.pizza.cheeseSlices, media.sides.fries],
     categoryId: "cat-combos",
     basePrice: 459,
     compareAtPrice: 699,
     diet: "veg",
     tags: ["value"],
     variants: [],
-    addons: [pickMany("pizzas", "Pick your 3 large pizzas", "Choose exactly three", allPizzaNames, 3), addOns],
+    addons: [addOns],
     availability: "live",
     featured: false,
     bestseller: false,
@@ -398,7 +510,7 @@ export const products: Product[] = [
     prepTimeMins: 28,
   },
 
-  /* ----------------------------- Choco Pizza ---------------------------- */
+  /* ----------------------------- Choco Pizza ------------------------ */
   {
     id: "d-choco-pizza",
     slug: "choco-pizza",

@@ -158,7 +158,7 @@ export function MenuBrowser({ products, categories }: MenuBrowserProps) {
           </div>
 
           {/* Category tabs */}
-          <div className="no-scrollbar -mx-5 flex gap-2 overflow-x-auto px-5 md:-mx-8 md:px-8 xl:-mx-10 xl:px-10" role="tablist" aria-label="Categories">
+          <div className="no-scrollbar bleed-rail flex gap-2 overflow-x-auto" role="tablist" aria-label="Categories">
             <Chip selected={!category} onClick={() => setParam("category")} role="tab" aria-selected={!category}>
               All
             </Chip>
@@ -185,7 +185,7 @@ export function MenuBrowser({ products, categories }: MenuBrowserProps) {
           </div>
 
           {/* Filters */}
-          <div className="no-scrollbar -mx-5 flex items-center gap-2 overflow-x-auto px-5 md:-mx-8 md:px-8 xl:-mx-10 xl:px-10" aria-label="Filters">
+          <div className="no-scrollbar bleed-rail flex items-center gap-2 overflow-x-auto" aria-label="Filters">
             {hasNonVeg ? (
               <>
                 <FilterChip active={dietParam === "veg"} onClick={() => setParam("diet", dietParam === "veg" ? undefined : "veg")} dot="bg-veg">

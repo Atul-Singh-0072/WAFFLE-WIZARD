@@ -97,7 +97,7 @@ export function StoresExplorer({ stores }: { stores: Store[] }) {
           </form>
 
           <div className="flex items-center gap-2">
-            <div className="no-scrollbar -mx-5 flex flex-1 gap-2 overflow-x-auto px-5 md:-mx-8 md:px-8 xl:-mx-10 xl:px-10" aria-label="Filters">
+            <div className="no-scrollbar bleed-rail flex flex-1 gap-2 overflow-x-auto" aria-label="Filters">
               {serviceModes.map((m) => {
                 const Icon = getIcon(m.icon);
                 return (

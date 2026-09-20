@@ -35,7 +35,7 @@ export default function AboutPage() {
 
       <div className="container-page">
         <div className="relative aspect-[21/9] overflow-hidden rounded-3xl shadow-lg">
-          <Image src={media.pizza.cheesyBlast} alt="Pizza fresh from the stone deck" fill priority sizes="100vw" className="object-cover" placeholder="blur" blurDataURL={BLUR_DATA_URL} />
+          <Image src={media.pizza.cheesePull} alt="Pizza fresh from the stone deck" fill priority sizes="100vw" className="object-cover" placeholder="blur" blurDataURL={BLUR_DATA_URL} />
           <div className="absolute inset-0 bg-gradient-to-t from-ink/60 to-transparent" aria-hidden />
           <p className="absolute bottom-6 left-6 max-w-lg font-display text-2xl font-bold text-white md:text-3xl">
             Freshly baked. Always.
